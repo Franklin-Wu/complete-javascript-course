@@ -17,7 +17,8 @@ Change the game to follow these rules:
 3. Add another dice to the game, so that there are two dices now. The player looses his current score when one of them is a 1. (Hint: you will need CSS to position the second dice, so take a look at the CSS code for the first one.)
 */
 
-var winningScore = 20;
+var winningScoreInput = document.getElementById('winning-score-input');
+var winningScore = winningScoreInput.value;
 
 var scores, roundScore, activePlayer, gamePlaying, previousDiceScores;
 
@@ -97,6 +98,9 @@ document.querySelector('.btn-hold').addEventListener('click', function() {
     }
 });
 
+winningScoreInput.addEventListener('input', function() {
+    winningScore = winningScoreInput.value;
+});
 
 function nextPlayer() {
     //Next player

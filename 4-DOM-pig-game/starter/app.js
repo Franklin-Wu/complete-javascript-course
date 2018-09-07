@@ -3,7 +3,7 @@ GAME RULES:
 
 - The game has 2 players, playing in rounds
 - In each turn, a player rolls a dice as many times as he whishes. Each result get added to his ROUND score
-- BUT, if the player rolls a 1, all his ROUND score gets lost. After that, it's the next player's turn
+- BUT, if the player rolls a 1 (or 2 1's in challenge 3), all his ROUND score gets lost. After that, it's the next player's turn
 - The player can choose to 'Hold', which means that his ROUND score gets added to his GLBAL score. After that, it's the next player's turn
 - The first player to reach 100 points on GLOBAL score wins the game
 */
@@ -29,12 +29,11 @@ function init() {
     gamePlaying = true;
     previousDiceScores = [0, 0];
 
-    document.querySelector('.dice').style.display = 'none';
-
     for (var i = 0; i < 2; i++) {
         updatePlayerScoreUI(i);
+        document.getElementById('die-' + i).style.display = 'none';
         document.getElementById('current-' + i).textContent = '0';
-        document.getElementById('name-' + i).textContent = 'Player 1';
+        document.getElementById('name-' + i).textContent = 'Player ' + (i + 1);
         document.querySelector('.player-' + i + '-panel').classList.remove('winner');
         document.querySelector('.player-' + i + '-panel').classList.remove('active');
     }
@@ -45,17 +44,29 @@ function updatePlayerScoreUI(player) {
     document.querySelector('#score-' + player).textContent = scores[player];
 }
 
+function rollOneDie() {
+    // 1. Random number
+    return Math.floor(Math.random() * 6) + 1;
+}
+
 init();
 
 document.querySelector('.btn-roll').addEventListener('click', function() {
     if (gamePlaying) {
-        // 1. Random number
-        var dice = Math.floor(Math.random() * 6) + 1;
+        var dice = 0;
 
         // 2. Display the result
-        var diceDOM = document.querySelector('.dice');
-        diceDOM.style.display = 'block';
-        diceDOM.src = 'dice-' + dice + '.png';
+        for (var i = 0; i < 2; i++) {
+            // Challenge 3. Add another dice to the game, so that there are two
+            // dices now. The player looses his current score when one of them
+            // is a 1. (Hint: you will need CSS to position the second dice, so
+            // take a look at the CSS code for the first one.)
+            var dieValue = rollOneDie();
+            var diceDOM = document.getElementById('die-' + i);
+            diceDOM.style.display = 'block';
+            diceDOM.src = 'dice-' + dieValue + '.png';
+            dice += dieValue;
+        }
 
         if (dice === 6 && previousDiceScores[activePlayer] === 6) {
             // Challenge 1. If this round score and the previous round score
@@ -63,7 +74,7 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
             scores[activePlayer] = 0;
             updatePlayerScoreUI(activePlayer);
             nextPlayer();
-        } else if (dice === 1) {
+        } else if (dice === 2) {
             // Next player
             nextPlayer();
         } else {
@@ -87,7 +98,9 @@ document.querySelector('.btn-hold').addEventListener('click', function() {
         // Check if player won the game
         if (scores[activePlayer] >= winningScore) {
             document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
-            document.querySelector('.dice').style.display = 'none';
+            document.querySelectorAll('.dice').forEach(function(element) {
+                element.style.display = 'none';
+            });
             document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
             document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
             gamePlaying = false;
@@ -98,6 +111,7 @@ document.querySelector('.btn-hold').addEventListener('click', function() {
     }
 });
 
+// Challenge 2. Read the winning score from an HTML input element.
 winningScoreInput.addEventListener('input', function() {
     winningScore = winningScoreInput.value;
 });

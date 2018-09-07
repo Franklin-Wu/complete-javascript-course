@@ -144,10 +144,17 @@ i {
 .dice {
     position: absolute;
     left: 50%;
-    top: 178px;
     transform: translateX(-50%);
-    height: 100px;
+    height: 72px;
     box-shadow: 0px 10px 60px rgba(0, 0, 0, 0.10);
+}
+
+#die-0 {
+    top: 160px;
+}
+
+#die-1 {
+    top: 256px;
 }
 
 .winner { background-color: #f7f7f7; }

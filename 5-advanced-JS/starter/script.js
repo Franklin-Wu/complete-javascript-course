@@ -102,11 +102,38 @@ c) correct answer (I would use a number for this)
 
 7. Suppose this code would be a plugin for other programmers to use in their code. So make sure that all your code is private and doesn't interfere with the other programmers code (Hint: we learned a special technique to do exactly that).
 */
+/*
+--- Expert level ---
+
+8. After you display the result, display the next random question, so that the game never ends (Hint: write a function for this and call it right after displaying the result)
+
+9. Be careful: after Task 8, the game literally never ends. So include the option to quit the game if the user writes 'exit' instead of the answer. In this case, DON'T call the function from task 8.
+
+10. Track the user's score to make the game more fun! So each time an answer is correct, add 1 point to the score (Hint: I'm going to use the power of closures for this, but you don't have to, just do this with the tools you feel more comfortable at this point).
+
+11. Display the score in the console. Use yet another method for this.
+*/
 
 function Question(question, answerChoices, correctAnswerIndex) {
     this.question = question;
     this.answerChoices = answerChoices;
     this.correctAnswerIndex = correctAnswerIndex;
+
+    this.logQuestionToConsole = function() {
+        console.log(this.question);
+        for (var i = 0; i < this.answerChoices.length; i++) {
+            console.log(i, this.answerChoices[i]);
+        }
+    };
+
+    this.getAndCheckAnswer = function() {
+        var answerIndex = parseInt(prompt('Enter your answer (0 - ' + (this.answerChoices.length - 1) + ').'));
+        if (answerIndex === this.correctAnswerIndex) {
+            console.log('Good job, that answer is correct!');
+        } else {
+            console.log('Sorry, that answer is incorrect.');
+        }
+    };
 }
 
 var question0 = new Question(
@@ -153,11 +180,86 @@ var question3 = new Question(
     1
 );
 
+var question4 = new Question(
+    'On which Beatles album is the song \'Doctor Robert\'?',
+    [
+        'Help!',
+        'Revolver',
+        'Rubber Soul',
+        'Sgt. Pepper\'s Lonely Hearts Club Band'
+    ],
+    1
+);
+
+var question5 = new Question(
+    'For what musical instrument is Jethro Tull\'s Ian Anderson best known?',
+    [
+        'Bass',
+        'Drums',
+        'Guitar',
+        'Flute'
+    ],
+    3
+);
+
+var question6 = new Question(
+    'Who was the original drummer for the Beatles?',
+    [
+        'Ginger Baker',
+        'Pete Best',
+        'Ringo Starr',
+        'Stuart Sutcliffe'
+    ],
+    1
+);
+
+var question7 = new Question(
+    'On which Led Zeppelin album is the song \'Houses of the Holy\'?',
+    [
+        'Houses of the Holy',
+        'Led Zeppelin III',
+        'Led Zeppelin IV',
+        'Physical Graffiti'
+    ],
+    3
+);
+
+var question8 = new Question(
+    'Who played lead guitar for Queen',
+    [
+        'Brian Eno',
+        'Brian May',
+        'Jimmy Hendrix',
+        'Jimmy Page'
+    ],
+    1
+);
+
+var question9 = new Question(
+    'With which band has Jimmy Page _not_ recorded a studio album?',
+    [
+        'The Firm',
+        'The Honeydrippers',
+        'The Moody Blues',
+        'The Yardbirds'
+    ],
+    2
+);
+
 var questions = [
     question0,
     question1,
     question2,
-    question3
+    question3,
+    question4,
+    question5,
+    question6,
+    question7,
+    question8,
+    question9
 ];
 
-console.dir(questions);
+var randomIndex = Math.floor(Math.random() * questions.length);
+var question = questions[randomIndex];
+question.logQuestionToConsole();
+question.getAndCheckAnswer();

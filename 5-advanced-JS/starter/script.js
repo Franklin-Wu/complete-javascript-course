@@ -114,152 +114,162 @@ c) correct answer (I would use a number for this)
 11. Display the score in the console. Use yet another method for this.
 */
 
-function Question(question, answerChoices, correctAnswerIndex) {
-    this.question = question;
-    this.answerChoices = answerChoices;
-    this.correctAnswerIndex = correctAnswerIndex;
+var QuizGame = (function(){
+    function Question(question, answerChoices, correctAnswerIndex) {
+        this.question = question;
+        this.answerChoices = answerChoices;
+        this.correctAnswerIndex = correctAnswerIndex;
 
-    this.logQuestionToConsole = function() {
-        console.log(this.question);
-        for (var i = 0; i < this.answerChoices.length; i++) {
-            console.log(i, this.answerChoices[i]);
-        }
+        this.logQuestionToConsole = function() {
+            console.log(this.question);
+            for (var i = 0; i < this.answerChoices.length; i++) {
+                console.log(i, this.answerChoices[i]);
+            }
+        };
+
+        this.getAndCheckAnswer = function() {
+            var answerIndex = parseInt(prompt('Enter your answer (0 - ' + (this.answerChoices.length - 1) + ').'));
+            if (answerIndex === this.correctAnswerIndex) {
+                console.log('Good job, that answer is correct!');
+            } else {
+                console.log('Sorry, that answer is incorrect.');
+            }
+        };
+    }
+
+    var question0 = new Question(
+        'Which Beatle was born first?',
+        [
+            'George Harrison',
+            'John Lennon',
+            'Paul McCartney',
+            'Ringo Starr'
+        ],
+        3
+    );
+
+    var question1 = new Question(
+        'Who played drums for Led Zeppelin?',
+        [
+            'Ginger Baker',
+            'John Bonham',
+            'John Paul Jones',
+            'Tom Baker'
+        ],
+        1
+    );
+
+    var question2 = new Question(
+        'Which of the following is _not_ an album by The Who?',
+        [
+            'Who Are We',
+            'Who Are You',
+            'Who\'s Last',
+            'Who\'s Next'
+        ],
+        0
+    );
+
+    var question3 = new Question(
+        'What is the best selling studio album by The Rolling Stones?',
+        [
+            'Exile On Main Street',
+            'Some Girls',
+            'Sticky Fingers',
+            'Tattoo You'
+        ],
+        1
+    );
+
+    var question4 = new Question(
+        'On which Beatles album is the song \'Doctor Robert\'?',
+        [
+            'Help!',
+            'Revolver',
+            'Rubber Soul',
+            'Sgt. Pepper\'s Lonely Hearts Club Band'
+        ],
+        1
+    );
+
+    var question5 = new Question(
+        'For what musical instrument is Jethro Tull\'s Ian Anderson best known?',
+        [
+            'Bass',
+            'Drums',
+            'Guitar',
+            'Flute'
+        ],
+        3
+    );
+
+    var question6 = new Question(
+        'Who was the original drummer for the Beatles?',
+        [
+            'Ginger Baker',
+            'Pete Best',
+            'Ringo Starr',
+            'Stuart Sutcliffe'
+        ],
+        1
+    );
+
+    var question7 = new Question(
+        'On which Led Zeppelin album is the song \'Houses of the Holy\'?',
+        [
+            'Houses of the Holy',
+            'Led Zeppelin III',
+            'Led Zeppelin IV',
+            'Physical Graffiti'
+        ],
+        3
+    );
+
+    var question8 = new Question(
+        'Who played lead guitar for Queen',
+        [
+            'Brian Eno',
+            'Brian May',
+            'Jimmy Hendrix',
+            'Jimmy Page'
+        ],
+        1
+    );
+
+    var question9 = new Question(
+        'With which band has Jimmy Page _not_ recorded a studio album?',
+        [
+            'The Firm',
+            'The Honeydrippers',
+            'The Moody Blues',
+            'The Yardbirds'
+        ],
+        2
+    );
+
+    var questions = [
+        question0,
+        question1,
+        question2,
+        question3,
+        question4,
+        question5,
+        question6,
+        question7,
+        question8,
+        question9
+    ];
+
+    function playOneRound() {
+        var randomIndex = Math.floor(Math.random() * questions.length);
+        var question = questions[randomIndex];
+        question.logQuestionToConsole();
+        question.getAndCheckAnswer();
+    }
+
+    return function() {
+        playOneRound();
     };
+})();
 
-    this.getAndCheckAnswer = function() {
-        var answerIndex = parseInt(prompt('Enter your answer (0 - ' + (this.answerChoices.length - 1) + ').'));
-        if (answerIndex === this.correctAnswerIndex) {
-            console.log('Good job, that answer is correct!');
-        } else {
-            console.log('Sorry, that answer is incorrect.');
-        }
-    };
-}
-
-var question0 = new Question(
-    'Which Beatle was born first?',
-    [
-        'George Harrison',
-        'John Lennon',
-        'Paul McCartney',
-        'Ringo Starr'
-    ],
-    3
-);
-
-var question1 = new Question(
-    'Who played drums for Led Zeppelin?',
-    [
-        'Ginger Baker',
-        'John Bonham',
-        'John Paul Jones',
-        'Tom Baker'
-    ],
-    2
-);
-
-var question2 = new Question(
-    'Which of the following is _not_ an album by The Who?',
-    [
-        'Who Are We',
-        'Who Are You',
-        'Who\'s Last',
-        'Who\'s Next'
-    ],
-    0
-);
-
-var question3 = new Question(
-    'What is the best selling studio album by The Rolling Stones?',
-    [
-        'Exile On Main Street',
-        'Some Girls',
-        'Sticky Fingers',
-        'Tattoo You'
-    ],
-    1
-);
-
-var question4 = new Question(
-    'On which Beatles album is the song \'Doctor Robert\'?',
-    [
-        'Help!',
-        'Revolver',
-        'Rubber Soul',
-        'Sgt. Pepper\'s Lonely Hearts Club Band'
-    ],
-    1
-);
-
-var question5 = new Question(
-    'For what musical instrument is Jethro Tull\'s Ian Anderson best known?',
-    [
-        'Bass',
-        'Drums',
-        'Guitar',
-        'Flute'
-    ],
-    3
-);
-
-var question6 = new Question(
-    'Who was the original drummer for the Beatles?',
-    [
-        'Ginger Baker',
-        'Pete Best',
-        'Ringo Starr',
-        'Stuart Sutcliffe'
-    ],
-    1
-);
-
-var question7 = new Question(
-    'On which Led Zeppelin album is the song \'Houses of the Holy\'?',
-    [
-        'Houses of the Holy',
-        'Led Zeppelin III',
-        'Led Zeppelin IV',
-        'Physical Graffiti'
-    ],
-    3
-);
-
-var question8 = new Question(
-    'Who played lead guitar for Queen',
-    [
-        'Brian Eno',
-        'Brian May',
-        'Jimmy Hendrix',
-        'Jimmy Page'
-    ],
-    1
-);
-
-var question9 = new Question(
-    'With which band has Jimmy Page _not_ recorded a studio album?',
-    [
-        'The Firm',
-        'The Honeydrippers',
-        'The Moody Blues',
-        'The Yardbirds'
-    ],
-    2
-);
-
-var questions = [
-    question0,
-    question1,
-    question2,
-    question3,
-    question4,
-    question5,
-    question6,
-    question7,
-    question8,
-    question9
-];
-
-var randomIndex = Math.floor(Math.random() * questions.length);
-var question = questions[randomIndex];
-question.logQuestionToConsole();
-question.getAndCheckAnswer();
+QuizGame();

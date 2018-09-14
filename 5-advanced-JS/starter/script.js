@@ -119,23 +119,23 @@ var QuizGame = (function(){
         this.question = question;
         this.answerChoices = answerChoices;
         this.correctAnswerIndex = correctAnswerIndex;
-
-        this.logQuestionToConsole = function() {
-            console.log(this.question);
-            for (var i = 0; i < this.answerChoices.length; i++) {
-                console.log(i, this.answerChoices[i]);
-            }
-        };
-
-        this.getAndCheckAnswer = function() {
-            var answerIndex = parseInt(prompt('Enter your answer (0 - ' + (this.answerChoices.length - 1) + ').'));
-            if (answerIndex === this.correctAnswerIndex) {
-                console.log('Good job, that answer is correct!');
-            } else {
-                console.log('Sorry, that answer is incorrect.');
-            }
-        };
     }
+
+    Question.prototype.logQuestionToConsole = function() {
+        console.log(this.question);
+        for (var i = 0; i < this.answerChoices.length; i++) {
+            console.log(i, this.answerChoices[i]);
+        }
+    };
+
+    Question.prototype.getAndCheckAnswer = function() {
+        var answerIndex = parseInt(prompt('Enter your answer (0 - ' + (this.answerChoices.length - 1) + ').'));
+        if (answerIndex === this.correctAnswerIndex) {
+            console.log('Good job, that answer is correct!');
+        } else {
+            console.log('Sorry, that answer is incorrect.');
+        }
+    };
 
     var question0 = new Question(
         'Which Beatle was born first?',

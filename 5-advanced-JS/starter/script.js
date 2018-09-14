@@ -115,6 +115,9 @@ c) correct answer (I would use a number for this)
 */
 
 var QuizGame = (function(){
+    var correctCount = 0;
+    var questionCount = 0;
+
     function Question(question, answerChoices, correctAnswerIndex) {
         this.question = question;
         this.answerChoices = answerChoices;
@@ -131,16 +134,22 @@ var QuizGame = (function(){
     Question.prototype.getAndCheckAnswer = function() {
         var answer = prompt('Enter your answer (0 - ' + (this.answerChoices.length - 1) + ') or Cancel to quit.');
         if (answer === null) {
+            console.log('Did not answer this question.');
             return false;
         }
         var answerIndex = parseInt(answer);
         if (answerIndex === this.correctAnswerIndex) {
+            correctCount += 1;
             console.log('Good job, that answer is correct!');
         } else {
             console.log('Sorry, that answer is incorrect.');
         }
         return true;
     };
+
+    Question.prototype.logScoreToConsole = function() {
+        console.log('current score: ' + correctCount + ' out of ' + questionCount);
+    }
 
     var question0 = new Question(
         'Which Beatle was born first?',
@@ -266,13 +275,18 @@ var QuizGame = (function(){
     ];
 
     function play() {
-        var continuePlaying = true;
-        while (continuePlaying) {
+        while (true) {
             var randomIndex = Math.floor(Math.random() * questions.length);
             var question = questions[randomIndex];
             question.logQuestionToConsole();
-            continuePlaying = question.getAndCheckAnswer();
+            if (!question.getAndCheckAnswer()) {
+                break;
+            }
+            questionCount += 1;
+            question.logScoreToConsole();
         }
+        var percentage = Math.round(100 * correctCount / questionCount);
+        console.log('\nfinal score: ' + correctCount + ' out of ' + questionCount + ' = ' + percentage + '%');
     }
 
     return function() {

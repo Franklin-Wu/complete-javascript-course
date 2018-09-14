@@ -114,9 +114,21 @@ c) correct answer (I would use a number for this)
 11. Display the score in the console. Use yet another method for this.
 */
 
-var QuizGame = (function(){
-    var correctCount = 0;
-    var questionCount = 0;
+var QuizGame = (function() {
+    function ScoreKeeper() {
+        var correctCount = 0;
+        var questionCount = 0;
+        return function(correct) {
+            if (correct) {
+                correctCount += 1;
+            }
+            questionCount += 1;
+            return {
+                correctCount: correctCount,
+                questionCount: questionCount
+            }
+        }
+    }
 
     function Question(question, answerChoices, correctAnswerIndex) {
         this.question = question;
@@ -131,23 +143,25 @@ var QuizGame = (function(){
         }
     };
 
-    Question.prototype.getAndCheckAnswer = function() {
+    Question.prototype.getAndCheckAnswer = function(scoreKeeper) {
         var answer = prompt('Enter your answer (0 - ' + (this.answerChoices.length - 1) + ') or Cancel to quit.');
         if (answer === null) {
             console.log('Did not answer this question.');
             return false;
         }
         var answerIndex = parseInt(answer);
+        var score;
         if (answerIndex === this.correctAnswerIndex) {
-            correctCount += 1;
             console.log('Good job, that answer is correct!');
+            score = scoreKeeper(true);
         } else {
             console.log('Sorry, that answer is incorrect.');
+            score = scoreKeeper(false);
         }
-        return true;
+        return score;
     };
 
-    Question.prototype.logScoreToConsole = function() {
+    Question.prototype.logScoreToConsole = function(correctCount, questionCount) {
         console.log('current score: ' + correctCount + ' out of ' + questionCount);
     }
 
@@ -244,7 +258,7 @@ var QuizGame = (function(){
         [
             'Brian Eno',
             'Brian May',
-            'Jimmy Hendrix',
+            'Jimi Hendrix',
             'Jimmy Page'
         ],
         1
@@ -275,18 +289,28 @@ var QuizGame = (function(){
     ];
 
     function play() {
+        var scoreKeeper = new ScoreKeeper();
+        var finalScore = {
+            correctCount: 0,
+            questionCount: 0
+        };
         while (true) {
             var randomIndex = Math.floor(Math.random() * questions.length);
             var question = questions[randomIndex];
             question.logQuestionToConsole();
-            if (!question.getAndCheckAnswer()) {
+            var score = question.getAndCheckAnswer(scoreKeeper);
+            if (score === false) {
                 break;
             }
-            questionCount += 1;
-            question.logScoreToConsole();
+            question.logScoreToConsole(score.correctCount, score.questionCount);
+            finalScore = score;
         }
-        var percentage = Math.round(100 * correctCount / questionCount);
-        console.log('\nfinal score: ' + correctCount + ' out of ' + questionCount + ' = ' + percentage + '%');
+        // Avoid division by 0 if the user quits immediately.
+        var percentage = 0;
+        if (finalScore.questionCount > 0) {
+            percentage = Math.round(100 * finalScore.correctCount / finalScore.questionCount);
+        }
+        console.log('\nfinal score: ' + finalScore.correctCount + ' out of ' + finalScore.questionCount + ' = ' + percentage + '%');
     }
 
     return function() {

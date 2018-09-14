@@ -122,19 +122,24 @@ var QuizGame = (function(){
     }
 
     Question.prototype.logQuestionToConsole = function() {
-        console.log(this.question);
+        console.log('\n' + this.question);
         for (var i = 0; i < this.answerChoices.length; i++) {
             console.log(i, this.answerChoices[i]);
         }
     };
 
     Question.prototype.getAndCheckAnswer = function() {
-        var answerIndex = parseInt(prompt('Enter your answer (0 - ' + (this.answerChoices.length - 1) + ').'));
+        var answer = prompt('Enter your answer (0 - ' + (this.answerChoices.length - 1) + ') or Cancel to quit.');
+        if (answer === null) {
+            return false;
+        }
+        var answerIndex = parseInt(answer);
         if (answerIndex === this.correctAnswerIndex) {
             console.log('Good job, that answer is correct!');
         } else {
             console.log('Sorry, that answer is incorrect.');
         }
+        return true;
     };
 
     var question0 = new Question(
@@ -260,15 +265,18 @@ var QuizGame = (function(){
         question9
     ];
 
-    function playOneRound() {
-        var randomIndex = Math.floor(Math.random() * questions.length);
-        var question = questions[randomIndex];
-        question.logQuestionToConsole();
-        question.getAndCheckAnswer();
+    function play() {
+        var continuePlaying = true;
+        while (continuePlaying) {
+            var randomIndex = Math.floor(Math.random() * questions.length);
+            var question = questions[randomIndex];
+            question.logQuestionToConsole();
+            continuePlaying = question.getAndCheckAnswer();
+        }
     }
 
     return function() {
-        playOneRound();
+        play();
     };
 })();
 
